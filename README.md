@@ -1,6 +1,8 @@
 # email
 A simple Go (golang) library for sending email across a variety of existing services.
 
+[![wercker status](https://app.wercker.com/status/dda3c4501ded6999dd0a784fddfd3041/m "wercker status")](https://app.wercker.com/project/bykey/dda3c4501ded6999dd0a784fddfd3041)
+
 Currently, there are three supported implementations:
 
 1. noopSender - simply logs received messages
