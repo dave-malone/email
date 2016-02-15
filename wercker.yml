@@ -43,3 +43,9 @@ build:
         name: go test
         code: |
           go test ./...
+
+    # Execute Integration tests
+    - script:
+        name: go integration test
+        code: |
+          go test ./_integration_tests/

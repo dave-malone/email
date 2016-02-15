@@ -10,7 +10,7 @@ func NewNoopSender() Sender {
 	return noopSender{}
 }
 
-func (sender noopSender) send(message *Message) error {
+func (sender noopSender) Send(message *Message) error {
 	lo.G.Debugf("message received: %v\n", message)
 
 	return nil

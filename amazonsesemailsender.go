@@ -29,7 +29,7 @@ func NewAmazonSESSender(endpoint, accessKeyID, secretAccessKey string) SenderFac
 	}
 }
 
-func (sender amazonSESSender) send(message *Message) error {
+func (sender amazonSESSender) Send(message *Message) error {
 	data := make(url.Values)
 	data.Add("Action", "SendEmail")
 	data.Add("Source", message.From)

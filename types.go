@@ -5,7 +5,7 @@ import "fmt"
 type (
 	//Sender basic interface for sending email messages
 	Sender interface {
-		send(message *Message) error
+		Send(message *Message) error
 	}
 
 	//SenderFactory function for defining an Sender factory

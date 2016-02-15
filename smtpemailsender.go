@@ -1,6 +1,9 @@
 package email
 
-import "errors"
+import (
+	"fmt"
+	"net/smtp"
+)
 
 type smtpSender struct {
 	host     string
@@ -21,6 +24,16 @@ func NewSMTPSender(host string, port int, username string, password string) Send
 	}
 }
 
-func (sender smtpSender) send(message *Message) error {
-	return errors.New("Not Yet Implemented")
+func (sender smtpSender) Send(message *Message) error {
+	auth := smtp.PlainAuth("", sender.username, sender.password, sender.host)
+
+	addr := fmt.Sprintf("%s:%d", sender.host, sender.port)
+	to := []string{message.To}
+	msg := []byte(fmt.Sprintf("To: %s\r\n"+
+		"Subject: %s\r\n"+
+		"\r\n"+
+		"%s\r\n", message.To, message.Subject, message.BodyText))
+	err := smtp.SendMail(addr, auth, message.From, to, msg)
+
+	return err
 }
