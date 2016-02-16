@@ -46,27 +46,14 @@ func (sender amazonSESSender) Send(message *Message) error {
 	return err
 }
 
-func (sender *amazonSESSender) setAuthorizationHeader(req *http.Request) {
-	now := time.Now().UTC()
-	// date format: "Tue, 25 May 2010 21:20:27 +0000"
-	date := now.Format("Mon, 02 Jan 2006 15:04:05 -0700")
-	req.Header.Set("Date", date)
-
-	h := hmac.New(sha256.New, []uint8(sender.secretAccessKey))
-	h.Write([]uint8(date))
-	signature := base64.StdEncoding.EncodeToString(h.Sum(nil))
-	auth := fmt.Sprintf("AWS3-HTTPS AWSAccessKeyId=%s, Algorithm=HmacSHA256, Signature=%s", sender.accessKeyID, signature)
-	req.Header.Set("X-Amzn-Authorization", auth)
-}
-
 func (sender *amazonSESSender) sesPost(data url.Values) (string, error) {
 	body := strings.NewReader(data.Encode())
 	req, err := http.NewRequest("POST", sender.endpoint, body)
 	if err != nil {
 		return "", err
 	}
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	sender.setAuthorizationHeader(req)
 
 	r, err := http.DefaultClient.Do(req)
@@ -86,4 +73,18 @@ func (sender *amazonSESSender) sesPost(data url.Values) (string, error) {
 	}
 
 	return string(resultbody), nil
+}
+
+func (sender *amazonSESSender) setAuthorizationHeader(req *http.Request) {
+	now := time.Now().UTC()
+	// date format: "Tue, 25 May 2010 21:20:27 +0000"
+	date := now.Format("Mon, 02 Jan 2006 15:04:05 -0700")
+
+	h := hmac.New(sha256.New, []uint8(sender.secretAccessKey))
+	h.Write([]uint8(date))
+	signature := base64.StdEncoding.EncodeToString(h.Sum(nil))
+	auth := fmt.Sprintf("AWS3-HTTPS AWSAccessKeyId=%s, Algorithm=HmacSHA256, Signature=%s", sender.accessKeyID, signature)
+
+	req.Header.Set("Date", date)
+	req.Header.Set("X-Amzn-Authorization", auth)
 }
