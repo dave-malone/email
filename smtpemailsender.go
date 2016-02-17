@@ -29,11 +29,16 @@ func (sender smtpSender) Send(message *Message) error {
 
 	addr := fmt.Sprintf("%s:%d", sender.host, sender.port)
 	to := []string{message.To}
-	msg := []byte(fmt.Sprintf("To: %s\r\n"+
-		"Subject: %s\r\n"+
-		"\r\n"+
-		"%s\r\n", message.To, message.Subject, message.BodyText))
-	err := smtp.SendMail(addr, auth, message.From, to, msg)
+
+	body, err := message.Body.String()
+
+	if err == nil {
+		msg := []byte(fmt.Sprintf("To: %s\r\n"+
+			"Subject: %s\r\n"+
+			"\r\n"+
+			"%s\r\n", message.To, message.Subject, body))
+		err = smtp.SendMail(addr, auth, message.From, to, msg)
+	}
 
 	return err
 }

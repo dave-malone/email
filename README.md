@@ -20,6 +20,13 @@ Then, you can initialize an email.Sender anywhere that requires it using the fac
 `sender := NewSenderFactory()`
 
 
+## Email Template Support
+
+Currently, there are two supported MessageBody implementations. simpleMessageBody is simply a wrapper around a string and can be used to send very basic email messages.
+
+The second implementation has been designed for HTML templates saved in files. This implementation is a light wrapper around Go's [html/template](https://golang.org/pkg/html/template/) package. An example of how to use this implementation is found in the [integration tests](_integration_tests/amazonsesemailsender_test.go)
+
+
 ## Functional Testing
 
 Functional testing requires real SMTP and AmazonSES accounts. The following environment variables are required to run the integration tests:

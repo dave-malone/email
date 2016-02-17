@@ -7,17 +7,6 @@ import (
 	"github.com/dave-malone/email"
 )
 
-func TestNewAmazonSESSender(t *testing.T) {
-	endpoint := os.Getenv("AWS_ENDPOINT")
-	accessKeyID := os.Getenv("AWS_ACCESS_KEY_ID")
-	secretAccessKey := os.Getenv("AWS_SECRET_ACCESS_KEY")
-	sender := email.NewAmazonSESSender(endpoint, accessKeyID, secretAccessKey)
-
-	if sender == nil {
-		t.Fatal("NewAmazonSESSender returned a nil value")
-	}
-}
-
 func TestAmazonSESSend(t *testing.T) {
 	endpoint := os.Getenv("AWS_ENDPOINT")
 	accessKeyID := os.Getenv("AWS_ACCESS_KEY_ID")
@@ -27,7 +16,19 @@ func TestAmazonSESSend(t *testing.T) {
 
 	sender := email.NewAmazonSESSender(endpoint, accessKeyID, secretAccessKey)()
 
-	err := sender.Send(email.NewMessage(from, to, "Test Email from AmazonSESSender", "Body Text", "Body HTML"))
+	data := struct {
+		Title string
+		Items []string
+	}{
+		Title: "Test page",
+		Items: []string{
+			"First Item",
+			"Second Item",
+		},
+	}
+
+	body := email.NewFileBasedHTMLTemplateMessageBody("test-html-template.tpl", data)
+	err := sender.Send(email.NewMessage(from, to, "Test Email from AmazonSESSender", body))
 
 	if err != nil {
 		t.Fatalf("send failed; %v", err)

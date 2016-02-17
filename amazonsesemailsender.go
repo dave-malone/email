@@ -32,12 +32,17 @@ func NewAmazonSESSender(endpoint, accessKeyID, secretAccessKey string) SenderFac
 func (sender amazonSESSender) Send(message *Message) error {
 	data := make(url.Values)
 	data.Add("Action", "SendEmail")
+	data.Add("AWSAccessKeyId", sender.accessKeyID)
 	data.Add("Source", message.From)
 	data.Add("Destination.ToAddresses.member.1", message.To)
 	data.Add("Message.Subject.Data", message.Subject)
-	data.Add("Message.Body.Text.Data", message.BodyText)
-	data.Add("Message.Body.Html.Data", message.BodyHTML)
-	data.Add("AWSAccessKeyId", sender.accessKeyID)
+
+	body, err := message.Body.String()
+
+	if err == nil {
+		// data.Add("Message.Body.Text.Data", message.Body.String())
+		data.Add("Message.Body.Html.Data", body)
+	}
 
 	responseBody, err := sender.sesPost(data)
 
