@@ -11,8 +11,8 @@ func TestNewNoopSender(t *testing.T) {
 }
 
 func TestNoopSend(t *testing.T) {
-	NewSenderFactory = NewNoopSender
-	sender := NewSenderFactory()
+	NewSender = NewNoopSender
+	sender := NewSender()
 
 	err := sender.Send(NewMessage("from@test.com", "to@test.com", "Subject", "Body Text", "Body HTML"))
 

@@ -13,8 +13,8 @@ type (
 )
 
 var (
-	//NewSenderFactory the selected EmailSenderFactory func to be used
-	NewSenderFactory SenderFactory
+	//NewSender the selected EmailSenderFactory func to be used to instantiate the selected Sender
+	NewSender SenderFactory
 )
 
 //Message the struct representing an Message
