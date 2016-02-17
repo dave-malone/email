@@ -25,28 +25,3 @@ Then, you can initialize an email.Sender anywhere that requires it using the fac
 Currently, there are two supported MessageBody implementations. simpleMessageBody is simply a wrapper around a string and can be used to send very basic email messages.
 
 The second implementation has been designed for HTML templates saved in files. This implementation is a light wrapper around Go's [html/template](https://golang.org/pkg/html/template/) package. An example of how to use this implementation is found in the [integration tests](_integration_tests/amazonsesemailsender_test.go)
-
-
-## Functional Testing
-
-Functional testing requires real SMTP and AmazonSES accounts. The following environment variables are required to run the integration tests:
-
-Email settings:
-* EMAIL_FROM (email address)
-* EMAIL_TO (email address)
-
-Amazon SES:
-* AWS_ENDPOINT
-* AWS_ACCESS_KEY_ID
-* AWS_SECRET_ACCESS_KEY
-
-SMTP:
-* SMTP_HOST
-* SMTP_PORT
-* SMTP_USERNAME
-* SMTP_PASSWORD
-
-
-Once you have all of the necessary environment variables set, you may run the integration test suite by executing the following:
-
-`go test ./_integration_tests/`
